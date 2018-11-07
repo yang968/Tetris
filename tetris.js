@@ -70,6 +70,23 @@ function playerDrop() {
   dropCounter = 0;
 }
 
+function playerMove(dir) {
+  player.pos.x += dir;
+
+}
+
+document.addEventListener('keydown', event => {
+  if (event.keyCode == 37) {
+    playerMove(-1);
+  } else if (event.keyCode == 39) {
+    playerMove(1);
+  } else if (event.keyCode == 40) {
+    playerDrop();
+  } else if (event.keyCode == 38) {
+
+  }
+});
+
 window.context = context;
 
 update();
