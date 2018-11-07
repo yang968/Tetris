@@ -5,6 +5,10 @@ context.scale(20, 20);
 
 const arena = createMatrix(12, 20);
 
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+
 const player = {
   pos: {x: 0, y: 0},
   matrix: null,
@@ -30,7 +34,7 @@ function draw() {
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   drawMatrix(arena, {x: 0, y: 0});
-  drawMatrix(t, {x: 5, y: 5});
+  drawMatrix(t, player.pos);
 }
 
 function drawMatrix(matrix, offset) {
@@ -39,16 +43,33 @@ function drawMatrix(matrix, offset) {
       if (value != 0) {
         context.fillStyle = 'red';
         context.fillRect(x + offset.x, y + offset.y, 1, 1);
-      } else {
-
+        context.strokeStyle = '#fff';
+        context.lineWidth = 0.05;
+        context.strokeRect(x + offset.x, y + offset.y, 1, 1);
       }
-      context.strokeStyle = '#fff';
-      context.lineWidth = 0.05;
-      context.strokeRect(x + offset.x, y + offset.y, 1, 1);
     });
   });
 }
 
+function update(time = 0) {
+  const deltaTime = time - lastTime;
+  lastTime = time;
+
+  dropCounter += deltaTime;
+  if (dropCounter > dropInterval) {
+    playerDrop();
+  }
+
+  draw();
+  requestAnimationFrame(update);
+}
+
+function playerDrop() {
+  player.pos.y++;
+
+  dropCounter = 0;
+}
+
 window.context = context;
 
-draw();
+update();
